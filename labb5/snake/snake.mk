@@ -5,18 +5,18 @@
 ## Debug
 ProjectName            :=snake
 ConfigurationName      :=Debug
-WorkspacePath          :=/home/love/Documents/skola/EDA482/labb5/labb5
-ProjectPath            :=/home/love/Documents/skola/EDA482/labb5/labb5/snake
+WorkspacePath          :=Z:/EDA482_snake/labb5
+ProjectPath            :=Z:/EDA482_snake/labb5/snake
 IntermediateDirectory  :=./Debug
 OutDir                 := $(IntermediateDirectory)
 CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
-User                   :=Love Lyckaro
-Date                   :=05/27/19
-CodeLitePath           :=/home/love/.codelite
-LinkerName             :=/usr/bin/arm-none-eabi-g++
-SharedObjectLinkerName :=/usr/bin/arm-none-eabi-g++ -shared -fPIC
+User                   :=lyckaro
+Date                   :=27/05/2019
+CodeLitePath           :=C:/cseapp/CodeLite
+LinkerName             :=$(CodeLiteDir)/tools/gcc-arm/bin/arm-none-eabi-g++.exe
+SharedObjectLinkerName :=$(CodeLiteDir)/tools/gcc-arm/arm-none-eabi-g++.exe -shared -fPIC
 ObjectSuffix           :=.o
 DependSuffix           :=.o.d
 PreprocessSuffix       :=.i
@@ -28,43 +28,45 @@ LibraryPathSwitch      :=-L
 PreprocessorSwitch     :=-D
 SourceSwitch           :=-c 
 OutputFile             :=$(IntermediateDirectory)/$(ProjectName).elf
-Preprocessors          :=$(PreprocessorSwitch)SIMULATOR 
+Preprocessors          :=$(PreprocessorSwitch)USBDM 
 ObjectSwitch           :=-o 
 ArchiveOutputSwitch    := 
 PreprocessOnlySwitch   :=-E
 ObjectsFileList        :="snake.txt"
 PCHCompileFlags        :=
-MakeDirCommand         :=mkdir -p
+MakeDirCommand         :=makedir
+RcCmpOptions           := 
+RcCompilerName         :=
 LinkOptions            :=  -T$(ProjectPath)/md407-ram.x -L$(ARM_V6LIB) -L$(ARM_GCC_V6LIB) -nostdlib
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)/home/love/Documents/skola/EDA482/libs/include $(IncludeSwitch). 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)/home/love/Documents/skola/EDA482/libs/include $(IncludeSwitch). $(IncludeSwitch)Z:\EDA482\libs\include 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)GPIO $(LibrarySwitch)delay $(LibrarySwitch)gcc $(LibrarySwitch)c_nano 
-ArLibs                 :=  "GPIO" "delay" "gcc" "c_nano" 
-LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/home/love/Documents/skola/EDA482/libs/lib 
+Libs                   := $(LibrarySwitch)GPIO $(LibrarySwitch)delay $(LibrarySwitch)gcc $(LibrarySwitch)c_nano $(LibrarySwitch)GPIO $(LibrarySwitch)delay 
+ArLibs                 :=  "GPIO" "delay" "gcc" "c_nano" "GPIO" "delay" 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)/home/love/Documents/skola/EDA482/libs/lib $(LibraryPathSwitch)Z:\EDA482\libs\lib 
 
 ##
 ## Common variables
 ## AR, CXX, CC, AS, CXXFLAGS and CFLAGS can be overriden using an environment variables
 ##
-AR       := /usr/bin/arm-none-eabi-ar rcu
-CXX      := /usr/bin/arm-none-eabi-g++
-CC       := /usr/bin/arm-none-eabi-gcc
+AR       := $(CodeLiteDir)/tools/gcc-arm/bin/arm-none-eabi-ar.exe rcu
+CXX      := $(CodeLiteDir)/tools/gcc-arm/bin/arm-none-eabi-g++.exe
+CC       := $(CodeLiteDir)/tools/gcc-arm/bin/arm-none-eabi-gcc.exe
 CXXFLAGS :=  -g -O0 -Wall $(Preprocessors)
-CFLAGS   :=  -g -O0 -mthumb -Wall -march=armv6-m -msoft-float -Wa,-adhln=test.s $(Preprocessors)
+CFLAGS   :=  -Wa,-adhln=test.s -g -O0 -msoft-float -Wall -mthumb -march=armv6-m $(Preprocessors)
 ASFLAGS  := 
-AS       := /usr/bin/arm-none-eabi-as
+AS       := $(CodeLiteDir)/tools/gcc-arm/bin/arm-none-eabi-as.exe
 
 
 ##
 ## User defined environment variables
 ##
-CodeLiteDir:=/usr/share/codelite
+CodeLiteDir:=C:\cseapp\CodeLite
 ARM_V6LIB:=$(GccArmDir)/arm-none-eabi/lib/thumb/v6-m
 ARM_GCC_V6LIB:=$(GccArmDir)/lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m
 ARM_M4FPLIB:=$(GccArmDir)/arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard
 ARM_GCC_M4FPLIB:=$(GccArmDir)/lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m
-Objects0=$(IntermediateDirectory)/Ascii.c$(ObjectSuffix) $(IntermediateDirectory)/nb_delay.c$(ObjectSuffix) $(IntermediateDirectory)/startup.c$(ObjectSuffix) $(IntermediateDirectory)/Graphics.c$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/PellesSuperRng.c$(ObjectSuffix) $(IntermediateDirectory)/keypad.c$(ObjectSuffix) $(IntermediateDirectory)/startup.c$(ObjectSuffix) $(IntermediateDirectory)/Ascii.c$(ObjectSuffix) $(IntermediateDirectory)/Graphics.c$(ObjectSuffix) $(IntermediateDirectory)/circular_buffer.c$(ObjectSuffix) $(IntermediateDirectory)/nb_delay.c$(ObjectSuffix) 
 
 
 
@@ -84,16 +86,17 @@ $(OutputFile): $(IntermediateDirectory)/.d $(Objects)
 
 PostBuild:
 	@echo Executing Post Build commands ...
-	$(GccArmDir)/bin/arm-none-eabi-objcopy -S -O srec  ./Debug/snake.elf ./Debug/snake.s19
-	$(GccArmDir)/bin/arm-none-eabi-objdump -D -S ./Debug/snake.elf > ./Debug/snake.dass
+	arm-none-eabi-objcopy -S -O srec  ./Debug/snake.elf ./Debug/snake.s19
+	arm-none-eabi-objdump -D -S ./Debug/snake.elf > ./Debug/snake.dass
+	
 	@echo Done
 
 MakeIntermediateDirs:
-	@test -d ./Debug || $(MakeDirCommand) ./Debug
+	@$(MakeDirCommand) "./Debug"
 
 
 $(IntermediateDirectory)/.d:
-	@test -d ./Debug || $(MakeDirCommand) ./Debug
+	@$(MakeDirCommand) "./Debug"
 
 PreBuild:
 
@@ -101,37 +104,61 @@ PreBuild:
 ##
 ## Objects
 ##
-$(IntermediateDirectory)/Ascii.c$(ObjectSuffix): Ascii.c $(IntermediateDirectory)/Ascii.c$(DependSuffix)
-	$(CC) $(SourceSwitch) "/home/love/Documents/skola/EDA482/labb5/labb5/snake/Ascii.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Ascii.c$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/Ascii.c$(DependSuffix): Ascii.c
-	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Ascii.c$(ObjectSuffix) -MF$(IntermediateDirectory)/Ascii.c$(DependSuffix) -MM Ascii.c
+$(IntermediateDirectory)/PellesSuperRng.c$(ObjectSuffix): PellesSuperRng.c $(IntermediateDirectory)/PellesSuperRng.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "Z:/EDA482_snake/labb5/snake/PellesSuperRng.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/PellesSuperRng.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/PellesSuperRng.c$(DependSuffix): PellesSuperRng.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/PellesSuperRng.c$(ObjectSuffix) -MF$(IntermediateDirectory)/PellesSuperRng.c$(DependSuffix) -MM PellesSuperRng.c
 
-$(IntermediateDirectory)/Ascii.c$(PreprocessSuffix): Ascii.c
-	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Ascii.c$(PreprocessSuffix) Ascii.c
+$(IntermediateDirectory)/PellesSuperRng.c$(PreprocessSuffix): PellesSuperRng.c
+	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/PellesSuperRng.c$(PreprocessSuffix) PellesSuperRng.c
 
-$(IntermediateDirectory)/nb_delay.c$(ObjectSuffix): nb_delay.c $(IntermediateDirectory)/nb_delay.c$(DependSuffix)
-	$(CC) $(SourceSwitch) "/home/love/Documents/skola/EDA482/labb5/labb5/snake/nb_delay.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/nb_delay.c$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/nb_delay.c$(DependSuffix): nb_delay.c
-	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/nb_delay.c$(ObjectSuffix) -MF$(IntermediateDirectory)/nb_delay.c$(DependSuffix) -MM nb_delay.c
+$(IntermediateDirectory)/keypad.c$(ObjectSuffix): keypad.c $(IntermediateDirectory)/keypad.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "Z:/EDA482_snake/labb5/snake/keypad.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/keypad.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/keypad.c$(DependSuffix): keypad.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/keypad.c$(ObjectSuffix) -MF$(IntermediateDirectory)/keypad.c$(DependSuffix) -MM keypad.c
 
-$(IntermediateDirectory)/nb_delay.c$(PreprocessSuffix): nb_delay.c
-	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/nb_delay.c$(PreprocessSuffix) nb_delay.c
+$(IntermediateDirectory)/keypad.c$(PreprocessSuffix): keypad.c
+	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/keypad.c$(PreprocessSuffix) keypad.c
 
 $(IntermediateDirectory)/startup.c$(ObjectSuffix): startup.c $(IntermediateDirectory)/startup.c$(DependSuffix)
-	$(CC) $(SourceSwitch) "/home/love/Documents/skola/EDA482/labb5/labb5/snake/startup.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/startup.c$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "Z:/EDA482_snake/labb5/snake/startup.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/startup.c$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/startup.c$(DependSuffix): startup.c
 	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/startup.c$(ObjectSuffix) -MF$(IntermediateDirectory)/startup.c$(DependSuffix) -MM startup.c
 
 $(IntermediateDirectory)/startup.c$(PreprocessSuffix): startup.c
 	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/startup.c$(PreprocessSuffix) startup.c
 
+$(IntermediateDirectory)/Ascii.c$(ObjectSuffix): Ascii.c $(IntermediateDirectory)/Ascii.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "Z:/EDA482_snake/labb5/snake/Ascii.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Ascii.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/Ascii.c$(DependSuffix): Ascii.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Ascii.c$(ObjectSuffix) -MF$(IntermediateDirectory)/Ascii.c$(DependSuffix) -MM Ascii.c
+
+$(IntermediateDirectory)/Ascii.c$(PreprocessSuffix): Ascii.c
+	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Ascii.c$(PreprocessSuffix) Ascii.c
+
 $(IntermediateDirectory)/Graphics.c$(ObjectSuffix): Graphics.c $(IntermediateDirectory)/Graphics.c$(DependSuffix)
-	$(CC) $(SourceSwitch) "/home/love/Documents/skola/EDA482/labb5/labb5/snake/Graphics.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Graphics.c$(ObjectSuffix) $(IncludePath)
+	$(CC) $(SourceSwitch) "Z:/EDA482_snake/labb5/snake/Graphics.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/Graphics.c$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/Graphics.c$(DependSuffix): Graphics.c
 	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/Graphics.c$(ObjectSuffix) -MF$(IntermediateDirectory)/Graphics.c$(DependSuffix) -MM Graphics.c
 
 $(IntermediateDirectory)/Graphics.c$(PreprocessSuffix): Graphics.c
 	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/Graphics.c$(PreprocessSuffix) Graphics.c
+
+$(IntermediateDirectory)/circular_buffer.c$(ObjectSuffix): circular_buffer.c $(IntermediateDirectory)/circular_buffer.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "Z:/EDA482_snake/labb5/snake/circular_buffer.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/circular_buffer.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/circular_buffer.c$(DependSuffix): circular_buffer.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/circular_buffer.c$(ObjectSuffix) -MF$(IntermediateDirectory)/circular_buffer.c$(DependSuffix) -MM circular_buffer.c
+
+$(IntermediateDirectory)/circular_buffer.c$(PreprocessSuffix): circular_buffer.c
+	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/circular_buffer.c$(PreprocessSuffix) circular_buffer.c
+
+$(IntermediateDirectory)/nb_delay.c$(ObjectSuffix): nb_delay.c $(IntermediateDirectory)/nb_delay.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "Z:/EDA482_snake/labb5/snake/nb_delay.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/nb_delay.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/nb_delay.c$(DependSuffix): nb_delay.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/nb_delay.c$(ObjectSuffix) -MF$(IntermediateDirectory)/nb_delay.c$(DependSuffix) -MM nb_delay.c
+
+$(IntermediateDirectory)/nb_delay.c$(PreprocessSuffix): nb_delay.c
+	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/nb_delay.c$(PreprocessSuffix) nb_delay.c
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

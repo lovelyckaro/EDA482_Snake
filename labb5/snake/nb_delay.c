@@ -19,6 +19,7 @@ void systick_irq_handler(void) {
         nb_delay_micro();
     }else {
         systick_flag = true;
+		SysTick->ctrl = 0;
     }
 }
 

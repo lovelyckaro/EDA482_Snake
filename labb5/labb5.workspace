@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="labb5" Database="" Version="10.0.0">
   <Project Name="snake" Path="snake/snake.project" Active="Yes"/>
+  <Project Name="tmp" Path="tmp/tmp.project" Active="No"/>
+  <Project Name="circular_buffer" Path="circular_buffer/circular_buffer.project" Active="No"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="yes">
       <Environment/>
       <Project Name="snake" ConfigName="Debug"/>
+      <Project Name="tmp" ConfigName="Debug"/>
+      <Project Name="circular_buffer" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Environment/>
       <Project Name="snake" ConfigName="Release"/>
+      <Project Name="tmp" ConfigName="Release"/>
+      <Project Name="circular_buffer" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
